@@ -5,6 +5,7 @@ import Stats from "./components/Stats";
 const initialState = [
     {id: 1, count: 0},
     {id: 2, count: 0},
+    {id: 3, count: 0},
 ];
 
 
@@ -12,7 +13,36 @@ const App = () => {
 
     const [state, setState] = useState(initialState)
     const totalCount = () => {
-        return state.reduce((accumulator, currentValue) => accumulator + currentValue.count,0)
+        return state.reduce((accumulator, currentValue) => accumulator + currentValue.count, 0)
+    }
+    const increment = (id) => {
+        const updatedCounter = state.map((c) => {
+            if (c.id === id) {
+                return {
+                    ...c,//spread syntax for copying
+                    count: c.count + 1
+                }
+            }
+            return {
+                ...c,
+            }
+        })
+        setState(updatedCounter)
+    }
+
+    const decrement = (id) => {
+        const updatedCounter = state.map((c) => {
+            if (c.id === id) {
+                return {
+                    ...c,
+                    count: c.count - 1
+                }
+            }
+            return {
+                ...c
+            }
+        })
+        setState(updatedCounter)
     }
 
     return (
@@ -23,8 +53,14 @@ const App = () => {
                 </h1>
 
                 <div className="max-w-md mx-auto mt-10 space-y-5">
-                    <Counter/>
-                    <Counter/>
+                    {state.map((count => <Counter
+                        key={count.id}
+                        id={count.id}
+                        count={count.count}
+                        increment={increment}
+                        decrement={decrement}/>))}
+
+                    {/*<Counter id={state.id} count={state.count} increment={increment} decrement={decrement}/>*/}
                     <Stats count={totalCount()}/>
                 </div>
             </div>
